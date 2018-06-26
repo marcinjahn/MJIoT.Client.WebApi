@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace MJIoT_WebAPI.Helpers
+namespace MjIot.Client.WebApi.Helpers
 {
     public class TokenValidator : DelegatingHandler
     {

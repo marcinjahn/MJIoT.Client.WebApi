@@ -1,12 +1,11 @@
-﻿using MJIoT.Storage.Models.Enums;
-using MJIoT_DBModel;
-using MJIoT_WebAPI.Helpers;
+﻿using MJIot.Storage.Models.Enums;
+using MjIot.Storage.Models.EF6Db;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MJIoT_WebAPI.Models.DTOs
+namespace MjIot.Client.WebApi.Models.DTOs
 {
 
     public class DeviceDTO

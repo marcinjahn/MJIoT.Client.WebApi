@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MJIoT_WebAPI.Helpers
+namespace MjIot.Client.WebApi.Helpers
 {
 
     public class IoTHubDeviceAvailabilityService : IDevicesAvailabilityService

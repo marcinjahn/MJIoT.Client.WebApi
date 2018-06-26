@@ -1,19 +1,19 @@
-﻿using MJIoT_WebAPI.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Threading.Tasks;
-using MJIoT_WebAPI.Helpers;
 
-using MJIoT.Storage.PropertyValues;
-using MJIoT.Storage.Models;
+using MJIot.Storage.Properties;
+using MJIot.Storage.Models;
 using System.Web.Http.Cors;
-using MJIoT_WebAPI.Models.DTOs;
+using MjIot.Client.WebApi.Helpers;
+using MjIot.Client.WebApi.Models.DTOs;
+using MjIot.Client.WebApi.Models;
 
-namespace MJIoT_WebAPI.Controllers
+namespace MjIot.Client.WebApi.Controllers
 {
     //[Authorize]
     [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]

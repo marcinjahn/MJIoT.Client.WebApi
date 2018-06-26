@@ -1,10 +1,10 @@
-﻿using MJIoT_DBModel;
+﻿using MjIot.Storage.Models.EF6Db;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace MJIoT_WebAPI.Models
+namespace MjIot.Client.WebApi.Models
 {
     public class UserParams
     {

@@ -1,18 +1,18 @@
-﻿using MJIoT_DBModel;
-using MJIoT_WebAPI.Models;
+﻿using MjIot.Storage.Models.EF6Db;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using MJIoT.Storage.PropertyValues;
+using MJIot.Storage.Properties;
 using System;
-using MJIoT.Storage.Models;
-using MJIoT_WebAPI.Models.DTOs;
+using MJIot.Storage.Models;
 using System.Data.Entity;
+using MjIot.Client.WebApi.Models.DTOs;
+using MjIot.Client.WebApi.Models;
 
-namespace MJIoT_WebAPI.Helpers
+namespace MjIot.Client.WebApi.Helpers
 {
     public class RequestHandler
     {
@@ -268,7 +268,7 @@ namespace MJIoT_WebAPI.Helpers
             };
         }
 
-        private async Task<DeviceDTO> GetDeviceDTO(MJIoT_DBModel.Device device, int userId, bool includeListeners, bool includeDevicesAvailability, bool includeProperties)
+        private async Task<DeviceDTO> GetDeviceDTO(Device device, int userId, bool includeListeners, bool includeDevicesAvailability, bool includeProperties)
         {
             //var name = _modelStorage.GetDeviceName(device);
             var name = await _propertyStorage.GetPropertyValueAsync(device.Id, "Name");
@@ -302,7 +302,7 @@ namespace MJIoT_WebAPI.Helpers
             return item;
         }
 
-        private List<PropertyListenersDTO> GenerateListenersData(MJIoT_DBModel.Device device)
+        private List<PropertyListenersDTO> GenerateListenersData(Device device)
         {
             var connections = _unitOfWork.Connections.GetDeviceConnections(device);
             var connectionGroups = connections
