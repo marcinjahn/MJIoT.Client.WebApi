@@ -11,6 +11,7 @@ using MJIot.Storage.Models;
 using System.Data.Entity;
 using MjIot.Client.WebApi.Models.DTOs;
 using MjIot.Client.WebApi.Models;
+using System.Diagnostics;
 
 namespace MjIot.Client.WebApi.Helpers
 {
@@ -22,15 +23,25 @@ namespace MjIot.Client.WebApi.Helpers
 
         Dictionary<DeviceType, List<PropertyDTO>> _deviceProperties;
 
+        //Stopwatch sw;
+
         //string BadUserMessage = "You do not have access to MJ IoT System! (User not recognized)";
         //string PropertyNonExistentMessage = "This property does not exist in the system nad cannot be changed!";
 
         public RequestHandler(IUnitOfWork unitOfWork, IPropertyStorage propertyStorage)
         {
+            if (unitOfWork == null || propertyStorage == null)
+                throw new ArgumentNullException("RequestHandler cannot be created - argments NULL");
+
+            //sw = new Stopwatch();
+            //sw.Start();
             _unitOfWork = unitOfWork;
             _propertyStorage = propertyStorage;
 
             _deviceProperties = new Dictionary<DeviceType, List<PropertyDTO>>();
+
+            //Debug.WriteLine("constructor finished");
+            //Debug.WriteLine("************* " + sw.Elapsed);
         }
 
         //public User DoUserCheck(string login, string password)
@@ -44,19 +55,38 @@ namespace MjIot.Client.WebApi.Helpers
 
         public async Task<List<DeviceDTO>> GetDevices(int userId, bool includeListeners, bool includeDevicesAvailability, bool includeProperties)
         {
+            //Debug.WriteLine("GetDevices started");
+            //Debug.WriteLine("************* " + sw.Elapsed);
             var devices = _unitOfWork.Devices.GetDevicesOfUser(userId);
+
+            //Debug.WriteLine("Devices fetched");
+            //Debug.WriteLine("************* " + sw.Elapsed);
 
             if (includeDevicesAvailability)
                 _iotHubServices = new IoTHubDeviceAvailabilityService();
 
             List<DeviceDTO> result = new List<DeviceDTO>();
 
+            List<Task<DeviceDTO>> tasks = new List<Task<DeviceDTO>>();
+
             foreach (var device in devices)
             {
-                DeviceDTO deviceData = await GetDeviceDTO(device, userId, includeListeners, includeDevicesAvailability, includeProperties);
-                result.Add(deviceData);
+                tasks.Add(GetDeviceDTO(device, userId, includeListeners, includeDevicesAvailability, includeProperties));
+                //DeviceDTO deviceData = await GetDeviceDTO(device, userId, includeListeners, includeDevicesAvailability, includeProperties);
+                //Debug.WriteLine("DeviceDTO task added");
+                //Debug.WriteLine("************* " + sw.Elapsed);
+                //result.Add(deviceData);
             }
 
+            await Task.WhenAll(tasks.ToArray());
+
+           // Debug.WriteLine("Tasks finished");
+            //Debug.WriteLine("************* " + sw.Elapsed);
+
+            result.AddRange(tasks.Select(n => n.Result));
+
+            //Debug.WriteLine("Return");
+            //Debug.WriteLine("************* " + sw.Elapsed);
             return result;
         }
 
@@ -219,29 +249,6 @@ namespace MjIot.Client.WebApi.Helpers
         {
             var senderDevice = _unitOfWork.Devices.Get(connectionData.Sender.DeviceId);
             var connections = _unitOfWork.Connections.GetDeviceConnections(senderDevice);
-
-            //var connectionsToRemove = connections
-            //    .Where(n =>
-            //    {
-            //        return (
-            //            connectionData.Listeners
-            //                .Select(b => b.DeviceId)
-            //                .Contains(n.ListenerDevice.Id)
-            //            &&
-            //            connectionsData.Listeners
-            //                .Select(b => b.PropertyId)
-            //                .Contains(n.ListenerProperty.Id)
-            //            &&
-            //            connectionsData.Listeners
-            //                .Select(b => (int)b.Condition)
-            //                .Contains((int)n.Condition)
-            //            &&
-            //            connectionsData.Listeners
-            //                .Select(b => b.ConditionValue)
-            //                .Contains(n.ConditionValue)
-            //        );
-            //    })
-            //    .ToList();
 
             var connectionsToRemove = connections
                 .Where(n => n.SenderDevice.Id == connectionData.Sender.DeviceId && n.ListenerDevice.Id == connectionData.Listener.DeviceId && n.SenderProperty.Id == connectionData.Sender.PropertyId && n.ListenerProperty.Id == connectionData.Listener.PropertyId && n.Filter == connectionData.Filter && n.FilterValue == connectionData.FilterValue && n.Calculation == connectionData.Calculation && n.CalculationValue == connectionData.CalculationValue)

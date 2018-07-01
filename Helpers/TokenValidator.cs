@@ -24,6 +24,7 @@ namespace MjIot.Client.WebApi.Helpers
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            System.Diagnostics.Debug.WriteLine("Token started");
             //PREFLIGHT CALL
             if (request.Method.Method == "OPTIONS")
                 return base.SendAsync(request, cancellationToken);
@@ -88,7 +89,7 @@ namespace MjIot.Client.WebApi.Helpers
             }
 
             //statusCode = HttpStatusCode.OK;
-
+            System.Diagnostics.Debug.WriteLine("Token finished");
             return base.SendAsync(request, cancellationToken);
         }
 
