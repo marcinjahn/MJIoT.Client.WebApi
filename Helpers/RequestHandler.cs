@@ -90,9 +90,8 @@ namespace MjIot.Client.WebApi.Helpers
             return result;
         }
 
-        public List<PropertyDTO> GetProperties(int userId, int deviceId)
+        public List<PropertyDTO> GetProperties(DeviceType deviceType)
         {
-            var deviceType = _unitOfWork.Devices.GetDeviceType(deviceId);
             var properties = _unitOfWork.PropertyTypes.GetPropertiesOfDevice(deviceType);
 
             List<PropertyDTO> result = new List<PropertyDTO>();
@@ -137,6 +136,31 @@ namespace MjIot.Client.WebApi.Helpers
             //            property.Name)
             //    );
             //}
+
+
+        }
+
+        public List<PropertyDTO> GetProperties(int deviceId)
+        {
+            var deviceType = _unitOfWork.Devices.GetDeviceType(deviceId);
+
+            var properties = _unitOfWork.PropertyTypes.GetPropertiesOfDevice(deviceType);
+
+            List<PropertyDTO> result = new List<PropertyDTO>();
+            foreach (var property in properties)
+            {
+                result.Add(new PropertyDTO
+                {
+                    Id = property.Id,
+                    IsConfigurable = property.UIConfigurable,
+                    Name = property.Name,
+                    IsListenerProperty = property.IsListenerProperty,
+                    IsSenderProperty = property.IsSenderProperty,
+                    Format = property.Format
+                });
+            }
+
+            return result;
 
 
         }
@@ -290,7 +314,7 @@ namespace MjIot.Client.WebApi.Helpers
             if (includeProperties)
             {
                 if (!_deviceProperties.ContainsKey(device.DeviceType))
-                    _deviceProperties[device.DeviceType] = GetProperties(userId, device.Id);
+                    _deviceProperties[device.DeviceType] = GetProperties(device.DeviceType);
 
                 properties = _deviceProperties[device.DeviceType];
             }

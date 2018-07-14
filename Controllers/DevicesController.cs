@@ -46,7 +46,7 @@ namespace MjIot.Client.WebApi.Controllers
         [ActionName("GetProperties")]
         public List<PropertyDTO> GetProperties(int deviceId)
         {
-            return _handler.GetProperties(GetUserId(), deviceId);
+            return _handler.GetProperties(deviceId);
         }
 
         [HttpPost]
