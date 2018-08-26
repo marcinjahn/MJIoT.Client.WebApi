@@ -28,6 +28,7 @@ namespace MjIot.Client.WebApi.Models.DTOs
         public bool IsListenerProperty { get; set; }
         public bool IsSenderProperty { get; set; }
         public PropertyFormat Format { get; set; }
+        public bool IsHistorized { get; set; }
     }
 
     public class SingleListenerDTO

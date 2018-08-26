@@ -104,7 +104,8 @@ namespace MjIot.Client.WebApi.Helpers
                     Name = property.Name,
                     IsListenerProperty = property.IsListenerProperty,
                     IsSenderProperty = property.IsSenderProperty,
-                    Format = property.Format
+                    Format = property.Format,
+                    IsHistorized = property.IsHistorized
                 });
             }
 
@@ -156,7 +157,8 @@ namespace MjIot.Client.WebApi.Helpers
                     Name = property.Name,
                     IsListenerProperty = property.IsListenerProperty,
                     IsSenderProperty = property.IsSenderProperty,
-                    Format = property.Format
+                    Format = property.Format,
+                    IsHistorized = property.IsHistorized
                 });
             }
 
