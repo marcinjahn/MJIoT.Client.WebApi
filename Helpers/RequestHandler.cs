@@ -12,6 +12,8 @@ using System.Data.Entity;
 using MjIot.Client.WebApi.Models.DTOs;
 using MjIot.Client.WebApi.Models;
 using System.Diagnostics;
+using System.Threading;
+using System.Globalization;
 
 namespace MjIot.Client.WebApi.Helpers
 {
@@ -39,6 +41,8 @@ namespace MjIot.Client.WebApi.Helpers
             _propertyStorage = propertyStorage;
 
             _deviceProperties = new Dictionary<DeviceType, List<PropertyDTO>>();
+
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
             //Debug.WriteLine("constructor finished");
             //Debug.WriteLine("************* " + sw.Elapsed);
